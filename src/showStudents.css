@@ -1,0 +1,272 @@
+.container {
+  width: 90%;
+  margin: 20px auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+.course-selection {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+}
+
+
+
+/*-----------------------------------------------------------------------------------*/
+
+
+
+
+/* showStudents.css */
+
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.course-selection {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.course-selection select {
+  padding: 5px;
+}
+
+.course-selection button {
+  padding: 6px 12px;
+  margin-left: 5px;
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+.edit-save-btn {
+  background-color: #1e90ff; /* blue */
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-save-btn:disabled {
+  background-color: #a0c4ff;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+select {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
+
+
+
+/**/
+
+.container {
+  width: 90%;
+  margin: 20px auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table, th, td {
+  border: 1px solid #ccc;
+}
+
+th, td {
+  padding: 10px;
+  text-align: left;
+}
+
+.course-selection {
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
+}
+
+
+
+/*-----------------------------------------------------------------------------------*/
+
+
+
+
+/* showStudents.css */
+
+.container {
+  max-width: 900px;
+  margin: 20px auto;
+  padding: 20px;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+.course-selection {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.course-selection select {
+  padding: 5px;
+}
+
+.course-selection button {
+  padding: 6px 12px;
+  margin-left: 5px;
+}
+
+
+/*------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+/*---------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+.edit-save-btn {
+  background-color: #1e90ff; /* blue */
+  color: white;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.edit-save-btn:disabled {
+  background-color: #a0c4ff;
+  cursor: not-allowed;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+table th,
+table td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: left;
+}
+
+select {
+  padding: 5px;
+  border-radius: 5px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

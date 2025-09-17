@@ -1,0 +1,211 @@
+
+/* module.css */
+
+/* Page background and font */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #f5f6fa;
+  color: #2d3436;
+  margin: 0;
+  padding: 0;
+}
+
+/* Header */
+h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e272e;
+  margin: 0;
+}
+
+/* Flex header section */
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 1.5rem;
+}
+
+/* Primary button (outside modal) */
+.btn-primary {
+  background-color: #1e9bfb;
+  color: #fff;
+  padding: 0.55rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  border: none;
+  cursor: pointer;
+}
+
+.btn-primary:hover {
+  background-color: #74b9ff;
+}
+
+/* Delete button */
+.btn-danger {
+  background-color: #e84118;
+  color: #fff;
+  padding: 0.4rem 0.9rem;
+  border-radius: 5px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  border: none;
+  transition: background 0.2s;
+}
+
+.btn-danger:hover {
+  background-color: #ff6b6b;
+}
+
+/* Table container */
+.table-container {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.05);
+  padding: 1.5rem;
+  overflow-x: auto;
+  margin-bottom: 2rem;
+}
+
+/* Table styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+}
+
+th, td {
+  text-align: left;
+  padding: 12px 15px;
+  font-size: 0.95rem;
+}
+
+th {
+  background-color: #dfe6e9;
+  font-weight: 600;
+  color: #2d3436;
+}
+
+tr {
+  border-bottom: 1px solid #dcdde1;
+  transition: background 0.3s;
+}
+
+tr:hover {
+  background-color: #f1f2f6;
+}
+
+/* Filter section */
+.mb-4 {
+  max-width: 300px;
+  margin-bottom: 1.5rem;
+}
+
+/* Select input */
+.select-input {
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 8px;
+  border: 1px solid #b2bec3;
+  font-size: 0.95rem;
+  outline: none;
+  transition: border-color 0.3s;
+}
+
+.select-input:focus {
+  border-color: #2287e6;
+  box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.2);
+}
+
+/* Modal input width */
+.modal-content input,
+.modal-content select {
+  width: 100%;
+  max-width: 400px;
+  padding: 0.55rem 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #b2bec3;
+  font-size: 0.95rem;
+  outline: none;
+  margin-bottom: 1rem;
+}
+
+.modal-content input:focus,
+.modal-content select:focus {
+  border-color: #0984e3;
+  box-shadow: 0 0 0 2px rgba(9, 132, 227, 0.2);
+}
+
+/* Modal Buttons */
+.modal-content .btn-cancel {
+  background-color: #f44336; /* Red for Cancel */
+  color: #ffffff;
+  padding: 0.55rem 1.3rem;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-content .btn-cancel:hover {
+  background-color: #d32f2f;
+}
+
+.modal-content .btn-success {
+  background-color: #4caf50; /* Green for Add Module */
+  color: #ffffff;
+  padding: 0.55rem 1.3rem;
+  border-radius: 6px;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.modal-content .btn-success:hover {
+  background-color: #388e3c;
+}
+
+/* Button group: Cancel and Add Module centered side by side */
+.modal-content .button-group {
+  display: flex;
+  justify-content: center; /* center buttons in modal */
+  gap: 1rem;               /* space between buttons */
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85rem;
+  }
+
+  th, td {
+    padding: 10px;
+  }
+
+  .btn-primary {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .mb-4 {
+    max-width: 100%;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
