@@ -1,0 +1,227 @@
+ MySQL  localhost:33060+ ssl  marksentry_3  SQL > desc marks_Scheme;
++--------------+------+------+-----+---------+----------------+
+| Field        | Type | Null | Key | Default | Extra          |
++--------------+------+------+-----+---------+----------------+
+| id           | int  | NO   | PRI | NULL    | auto_increment |
+| module_id    | int  | YES  | MUL | NULL    |                |
+| theory_marks | int  | YES  |     | NULL    |                |
+| lab_marks    | int  | YES  |     | NULL    |                |
+| IA_1         | int  | YES  |     | NULL    |                |
+| IA_2         | int  | YES  |     | NULL    |                |
++--------------+------+------+-----+---------+----------------+
+6 rows in set (0.0038 sec)
+ MySQL  localhost:33060+ ssl  marksentry_3  SQL >
+
+
+********************************************************************************************************************************************************************************************
+
+
+Create marks_Scheme table
+CREATE TABLE IF NOT EXISTS marks_Scheme (
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    module_id INT,
+    theory_marks INT,
+    lab_marks INT,
+    IA_1 INT,
+    IA_2 INT,
+    FOREIGN KEY (module_id) REFERENCES module(id) -- assumes a 'module' table exists
+);
+
+
+INSERT INTO marks_scheme (module_id, theory_marks, lab_marks, IA_1, IA_2)
+VALUES (1, 50, 25, 10, 15);
+
+
+
+********************************************************************************************************************************************************************************************
+
+
+BACKEND
+
+
+********************************************************************************************************************************************************************************************
+
+
+
+//backend/routes/marksSchemeRoutes/addMarks.js
+
+
+const express = require("express");
+const router = express.Router();
+const pool = require("../../config/db");
+const { successResponse, errorResponse } = require("../../utils/apiResponse");
+
+//  Add marks scheme
+router.post("/add", async (req, res) => {
+  try {
+    const { module_id, theory_marks, lab_marks, IA_1, IA_2 } = req.body;
+
+    if (!module_id || theory_marks == null || lab_marks == null) {
+      return res.status(400).send(errorResponse("Missing required fields"));
+    }
+
+    await pool.query(
+      "INSERT INTO marks_scheme (module_id, theory_marks, lab_marks, IA_1, IA_2) VALUES (?, ?, ?, ?, ?)",
+      [module_id, theory_marks, lab_marks, IA_1, IA_2]
+    );
+
+    res.status(201).send(successResponse("Marks scheme added successfully"));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(errorResponse("Failed to add marks scheme"));
+  }
+});
+
+module.exports = router;
+
+
+********************************************************************************************************************************************************************************************
+
+
+
+
+
+//backend/routes/marksSchemeRoutes/getMarks.js
+
+const express = require("express");
+const router = express.Router();
+const pool = require("../../config/db");
+const { successResponse, errorResponse } = require("../../utils/apiResponse");
+
+// ✅ Get all marks scheme
+router.get("/all", async (req, res) => {
+  try {
+    const [rows] = await pool.query(`
+      SELECT ms.id, m.module_name, ms.theory_marks, ms.lab_marks, ms.IA_1, ms.IA_2
+      FROM marks_scheme ms
+      JOIN module m ON ms.module_id = m.module_id
+    `);
+    res.status(200).send(successResponse(rows));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(errorResponse("Failed to fetch marks scheme"));
+  }
+});
+
+module.exports = router;
+
+
+
+
+********************************************************************************************************************************************************************************************
+
+//backend/routes/marksSchemeRoutes/getModules.js
+
+const express = require("express");
+const router = express.Router();
+const pool = require("../../config/db");
+const { successResponse, errorResponse } = require("../../utils/apiResponse");
+
+// ✅ Get all modules (for dropdown in Add Marks form)
+router.get("/modules", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT module_id, module_name FROM module"
+    ); // change table if needed
+    res.status(200).send(successResponse(rows));
+  } catch (error) {
+    console.error(error);
+    res.status(500).send(errorResponse("Failed to fetch modules"));
+  }
+});
+
+module.exports = router;
+
+********************************************************************************************************************************************************************************************
+
+
+//backend/routes/marksSchemeRoutes/index.js
+
+
+const express = require("express");
+const router = express.Router();
+
+// Import route files
+const getModules = require("./getModules");
+const getMarks = require("./getMarks");
+const addMarks = require("./addMarks");
+
+// Use them
+router.use(getModules);
+router.use(getMarks);
+router.use(addMarks);
+
+module.exports = router;
+
+
+
+********************************************************************************************************************************************************************************************
+
+
+
+
+//backend/routes/studentRoutes/scoresstudent.js
+
+
+
+const express = require("express");
+const router = express.Router();
+const pool = require("../../config/db");
+const { successResponse, errorResponse } = require("../../utils/stdResponse");
+
+// GET all student scores
+router.get("/", async (req, res) => {
+  try {
+    const [rows] = await pool.query(
+      `SELECT s.student_name, c.course_name, m.module_name, 
+              mk.theory_marks, mk.lab_marks, mk.IA_1, mk.IA_2
+       FROM student s
+       LEFT JOIN marks mk ON s.student_id = mk.student_id
+       LEFT JOIN module m ON mk.module_id = m.module_id
+       LEFT JOIN course c ON m.course_id = c.course_id
+       ORDER BY s.student_name, c.course_name, m.module_name`
+    );
+
+    if (!rows.length) return res.status(404).json(errorResponse("No marks found"));
+
+    // ✅ Return actual rows in the response
+    res.json(successResponse("Student scores fetched successfully", rows));
+  } catch (err) {
+    console.error("DB ERROR:", err);
+    res.status(500).json(errorResponse(err.message));
+  }
+});
+
+module.exports = router;
+
+
+const scoresstudent = require("./scoresstudent");
+router.use("/marks", scoresstudent);  
+
+
+
+
+********************************************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
