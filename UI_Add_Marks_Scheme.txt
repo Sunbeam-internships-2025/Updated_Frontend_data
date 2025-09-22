@@ -1,0 +1,533 @@
+
+
+
+
+
+
+
+frontend/src/pages/Coordinator/Coord_addMarksScheme.js
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../AddMarksScheme.css";
+
+const AddMarksScheme = () => {
+  const [modules, setModules] = useState([]);
+  const [marksSchemes, setMarksSchemes] = useState([]);
+
+  const [formData, setFormData] = useState({
+    module_id: "",
+    theory_marks: "",
+    lab_marks: "",
+    IA_1: "",
+    IA_2: "",
+  });
+
+  // Fetch all modules
+  const fetchModules = async () => {
+    try {
+      const res = await axios.get("http://localhost:1111/marks-scheme/modules");
+      setModules(res.data.data || []);
+    } catch (error) {
+      toast.error("Failed to load modules ❌");
+      console.error(error);
+    }
+  };
+
+  // Fetch all marks schemes
+  const fetchMarksSchemes = async () => {
+    try {
+      const res = await axios.get("http://localhost:1111/marks-scheme/all");
+      setMarksSchemes(res.data.data || []);
+    } catch (error) {
+      toast.error("Failed to load marks schemes ❌");
+      console.error(error);
+    }
+  };
+
+  useEffect(() => {
+    fetchModules();
+    fetchMarksSchemes();
+  }, []);
+
+  //  Handle form input change
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Submit form
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!formData.module_id) {
+      return toast.error("Please select a module ⚠️");
+    }
+    try {
+      await axios.post("http://localhost:1111/marks-scheme/add", formData);
+      toast.success("Marks scheme added successfully ✅");
+
+      // Refresh table
+      fetchMarksSchemes();
+
+      // Reset form
+      setFormData({
+        module_id: "",
+        theory_marks: "",
+        lab_marks: "",
+        IA_1: "",
+        IA_2: "",
+      });
+    } catch (error) {
+      toast.error("Failed to add marks scheme ❌");
+      console.error(error);
+    }
+  };
+
+  return (
+    <div className="add-marks-scheme-container">
+      <ToastContainer />
+
+      <div className="marks-sections">
+        {/* Section 1: Show All Marks Schemes */}
+        <div className="marks-card">
+          <h2 className="marks-title">All Marks Schemes</h2>
+          <div className="table-wrapper">
+            <table className="marks-table">
+              <thead>
+                <tr>
+                  <th>Module Name</th>
+                  <th>Theory Marks</th>
+                  <th>Lab Marks</th>
+                  <th>IA 1</th>
+                  <th>IA 2</th>
+                </tr>
+              </thead>
+              <tbody>
+                {marksSchemes.length > 0 ? (
+                  marksSchemes.map((ms) => (
+                    <tr key={ms.id}>
+                      <td>{ms.module_name}</td>
+                      <td>{ms.theory_marks}</td>
+                      <td>{ms.lab_marks}</td>
+                      <td>{ms.IA_1}</td>
+                      <td>{ms.IA_2}</td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan="5" className="text-center">
+                      No marks schemes found
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        {/* Section 2: Add Marks To Module */}
+        <div className="marks-card">
+          <h2 className="marks-title">Add Marks To Module</h2>
+          <form onSubmit={handleSubmit} className="add-marks-form">
+            <div className="form-group">
+              <label>Select Module</label>
+              <select
+                name="module_id"
+                value={formData.module_id}
+                onChange={handleChange}
+                required
+              >
+                <option value="">Select Module</option>
+                {modules.map((m) => (
+                  <option key={m.module_id} value={m.module_id}>
+                    {m.module_name}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
+              <label>Theory Marks</label>
+              <input
+                type="number"
+                name="theory_marks"
+                value={formData.theory_marks}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>Lab Marks</label>
+              <input
+                type="number"
+                name="lab_marks"
+                value={formData.lab_marks}
+                onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label>IA 1</label>
+              <input
+                type="number"
+                name="IA_1"
+                value={formData.IA_1}
+                onChange={handleChange}
+              />
+            </div>
+
+            <div className="form-group">
+              <label>IA 2</label>
+              <input
+                type="number"
+                name="IA_2"
+                value={formData.IA_2}
+                onChange={handleChange}
+              />
+            </div>
+
+            <button type="submit" className="save-button">
+              Save
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default AddMarksScheme;
+
+
+
+
+*****************************************************************************************************************************************************************
+
+
+
+
+
+/* AddMarksScheme.css */
+
+.add-marks-scheme-container {
+  max-width: 700px;
+  min-height: 650px;
+  margin: 2rem auto;
+  padding: 1.5rem; /* slightly reduced padding */
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem; /* space between cards */
+}
+
+
+
+/* Full page container to center content */
+.page-wrapper {
+  min-height: 100vh;        /* full viewport height */
+  display: flex;
+  justify-content: center;  /* horizontal center */
+  align-items: center;      /* vertical center */
+  background-color: #f9fafb; /* optional background */
+  margin: 0;
+  padding: 0;
+}
+
+/* Your existing card container */
+.add-marks-scheme-container {
+  max-width: 900px;
+  width: 100%;
+  padding: 1.5rem;
+  background-color: #ffffff;
+  border-radius: 1rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+
+/* Card Styling */
+.marks-card {
+  background: #fff;
+  border-radius: 0.8rem;
+  padding: 1.25rem; /* less padding inside card */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Section Titles */
+.marks-title {
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-align: center;
+  margin-bottom: 0.75rem;
+  color: #333333;
+}
+
+/* Table Styling */
+.marks-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid #ccc;
+  font-size: 0.95rem; /* smaller text */
+}
+
+.marks-table th,
+.marks-table td {
+  border: 1px solid #ccc;
+  padding: 0.6rem; /* reduced cell padding */
+  text-align: center;
+}
+
+.marks-table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  color: #444;
+}
+
+.marks-table tr:nth-child(even) {
+  background-color: #fafafa;
+}
+
+.marks-table tr:hover {
+  background-color: #f1f5f9;
+}
+
+/* Form Styling */
+.add-marks-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem; /* less spacing between fields */
+  
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.form-group label {
+  font-weight: 500;
+  font-size: 0.95rem;
+  color: #555555;
+  
+}
+
+/* Input & Select Fields */
+.form-group input,
+.form-group select {
+  height: 36px;              /* fixed standard height */
+  padding: 0 0.6rem;         /* horizontal padding only */
+  border: 1px solid #ccc;
+  border-radius: 0.4rem;
+  font-size: 0.95rem;
+  line-height: normal;       /* ensures compact text alignment */
+  box-sizing: border-box;
+}
+
+
+
+/* Button */
+.save-button {
+  width: 200px;              /* fixed width */
+  padding: 0.6rem;
+  background-color: #1d4ed8;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  margin: 0 auto;            /* ✅ centers button horizontally */
+  display: block;            /* ensures margin auto works */
+}
+
+.save-button:hover {
+  background-color: #2563eb;
+}
+
+/* Responsive Adjustments */
+@media (max-height: 750px) {
+  .add-marks-scheme-container {
+    min-height: 600px;
+    padding: 1.25rem;
+  }
+}
+
+
+
+.marks-card {
+  background: #fff;
+  border-radius: 0.8rem;
+  padding: 1.25rem;           /* internal padding inside card */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #ccc;     /* border around the card */
+  margin-bottom: 1.5rem;      /* space below the card so next card is not touching */
+}
+
+
+
+
+*****************************************************************************************************************************************************************
+
+
+
+
+// frontend/src/pages/student/StudentMarks.js
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import "../../grade_see.css"; // optional for styling
+
+const StudentMarks = () => {
+  const [marks, setMarks] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchMarks = async () => {
+      try {
+        // Correct backend endpoint
+        const response = await axios.get("http://localhost:1111/student/marks");
+        // Access the "data" array inside the response
+        setMarks(response.data.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching marks:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchMarks();
+  }, []);
+
+  if (loading) {
+    return <p>Loading marks...</p>;
+  }
+
+  return (
+    <div className="student-marks-container">
+      <h2>Student Marks</h2>
+      <table className="marks-table">
+        <thead>
+          <tr>
+            <th>Student Name</th>
+            <th>Course Name</th>
+            <th>Module Name</th>
+            <th>Theory Marks</th>
+            <th>Lab Marks</th>
+            <th>IA 1</th>
+            <th>IA 2</th>
+          </tr>
+        </thead>
+        <tbody>
+          {marks && marks.length > 0 ? (
+            marks.map((item, index) => (
+              <tr key={index}>
+                <td>{item.student_name || "-"}</td>
+                <td>{item.course_name || "-"}</td>
+                <td>{item.module_name || "-"}</td>
+                <td>{item.theory_marks ?? "-"}</td>
+                <td>{item.lab_marks ?? "-"}</td>
+                <td>{item.IA_1 ?? "-"}</td>
+                <td>{item.IA_2 ?? "-"}</td>
+              </tr>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="7">No marks found</td>
+            </tr>
+          )}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default StudentMarks;
+
+
+
+
+*********************************************************************************************************************************************************************************************
+
+/* src/pages/student/StudentMarks.css */
+.student-marks-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.marks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.marks-table th,
+.marks-table td {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.marks-table th {
+  background-color: #f0f0f0;
+}
+
+.marks-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+
+
+
+
+*****************************************************************************************************************************************************************
+
+frontend/src/components/Navbar.js
+
+in this navbar add this line 
+
+<Link to="/coordinator/add-marks-scheme">Add Marks Scheme</Link>
+
+
+
+
+*****************************************************************************************************************************************************************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
