@@ -1,0 +1,128 @@
+
+
+
+
+//frontend/src/pages/Mentor/Mentor_pendingTask.js
+
+
+
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
+
+const MentorPendingTask = () => {
+  const [tasks, setTasks] = useState([]);
+  const [editId, setEditId] = useState(null);
+  const [marksData, setMarksData] = useState({});
+
+  const fetchTasks = async () => {
+    try {
+      const res = await axios.get("http://localhost:1111/mentor/pending-task");
+      setTasks(res.data.data);
+    } catch (err) {
+      toast.error("Error fetching tasks");
+    }
+  };
+
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  const handleEdit = (task) => {
+    setEditId(task.mark_id);
+    setMarksData({
+      theory_marks: task.theory_marks ?? 0,
+      lab_marks: task.lab_marks ?? 0,
+      IA_1: task.IA_1 ?? 0,
+      IA_2: task.IA_2 ?? 0
+    });
+  };
+
+  const handleChange = (e) => {
+    setMarksData({ ...marksData, [e.target.name]: Number(e.target.value) });
+  };
+
+  const handleSave = async (mark_id) => {
+    const { theory_marks, IA_1, IA_2 } = marksData;
+
+    // Validation
+    if (theory_marks < 0 || theory_marks > 40) {
+      toast.error("Invalid marks entered for Theory. It should be 0-40");
+      return;
+    }
+    if (IA_1 < 0 || IA_1 > 10 || IA_2 < 0 || IA_2 > 10) {
+      toast.error("Invalid marks entered for IA_1 or IA_2. It should be 0-10");
+      return;
+    }
+
+    try {
+      await axios.put("http://localhost:1111/mentor/pending-task/update", { mark_id, ...marksData });
+      toast.success("Task updated successfully");
+      setEditId(null);
+      fetchTasks();
+    } catch (err) {
+      toast.error(err.response?.data?.message || "Error updating task");
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem" }}>
+      <h2>Pending Tasks</h2>
+      <table border="1" width="100%" cellPadding="10">
+        <thead>
+          <tr>
+            <th>Staff Name</th>
+            <th>Student Name</th>
+            <th>Group Name</th>
+            <th>Module Name</th>
+            <th>Theory Marks</th>
+            <th>Lab Marks</th>
+            <th>IA_1</th>
+            <th>IA_2</th>
+            <th>Start Date</th>
+            <th>Till Date</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tasks.map((task) => (
+            <tr key={task.mark_id}>
+              <td>{task.staff_name}</td>
+              <td>{task.student_name}</td>
+              <td>{task.group_name}</td>
+              <td>{task.module_name}</td>
+              {editId === task.mark_id ? (
+                <>
+                  <td><input name="theory_marks" type="number" value={marksData.theory_marks} onChange={handleChange} /></td>
+                  <td><input name="lab_marks" type="number" value={marksData.lab_marks} onChange={handleChange} /></td>
+                  <td><input name="IA_1" type="number" value={marksData.IA_1} onChange={handleChange} /></td>
+                  <td><input name="IA_2" type="number" value={marksData.IA_2} onChange={handleChange} /></td>
+                </>
+              ) : (
+                <>
+                  <td>{task.theory_marks}</td>
+                  <td>{task.lab_marks}</td>
+                  <td>{task.IA_1}</td>
+                  <td>{task.IA_2}</td>
+                </>
+              )}
+              <td>{new Date(task.start_date).toLocaleDateString()}</td>
+              <td>{new Date(task.till_date).toLocaleDateString()}</td>
+              <td>
+                {editId === task.mark_id ? (
+                  <button onClick={() => handleSave(task.mark_id)}>Save</button>
+                ) : (
+                  <button onClick={() => handleEdit(task)}>Edit</button>
+                )}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <ToastContainer position="top-right" autoClose={3000} />
+    </div>
+  );
+};
+
+export default MentorPendingTask;
