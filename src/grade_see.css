@@ -1,0 +1,29 @@
+/* src/pages/student/StudentMarks.css */
+.student-marks-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 0.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+
+.marks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.marks-table th,
+.marks-table td {
+  padding: 0.8rem 1rem;
+  border: 1px solid #ddd;
+  text-align: center;
+}
+
+.marks-table th {
+  background-color: #f0f0f0;
+}
+
+.marks-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}

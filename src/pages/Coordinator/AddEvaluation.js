@@ -1,7 +1,9 @@
 
 // import React, { useEffect, useState } from "react";
 // import axios from "axios";
-// import "../../AddEvaluation.css"; // import the CSS file
+// import { ToastContainer, toast } from "react-toastify";
+// import "react-toastify/dist/ReactToastify.css";
+// import "../../AddEvaluation.css";
 
 // const AddEvaluation = () => {
 //   const [subjectList, setSubjectList] = useState([]);
@@ -29,6 +31,7 @@
 //       setSubjectList(res.data.data || []);
 //     } catch (err) {
 //       console.error("Error fetching subjects:", err);
+//       toast.error("Failed to fetch subjects");
 //     }
 //   };
 
@@ -38,6 +41,7 @@
 //       setGroupList(res.data.data || []);
 //     } catch (err) {
 //       console.error("Error fetching groups:", err);
+//       toast.error("Failed to fetch groups");
 //     }
 //   };
 
@@ -47,6 +51,7 @@
 //       setStaffList(res.data.data || []);
 //     } catch (err) {
 //       console.error("Error fetching staffs:", err);
+//       toast.error("Failed to fetch staff members");
 //     }
 //   };
 
@@ -70,7 +75,7 @@
 
 //     const { module_id, group_id, staff_id, types, start_date, end_date } = form;
 //     if (!module_id || !group_id || !staff_id || !types.length || !start_date || !end_date) {
-//       alert("All fields are required.");
+//       toast.warn("All fields are required");
 //       return;
 //     }
 
@@ -78,11 +83,19 @@
 
 //     try {
 //       const res = await axios.post("http://localhost:1111/coordinator/assign-tasks", payload);
-//       alert("Task Assigned Successfully!");
+//       toast.success("Task Assigned Successfully!");
 //       console.log("Response:", res.data);
+//       setForm({
+//         module_id: "",
+//         group_id: "",
+//         staff_id: "",
+//         types: [],
+//         start_date: "",
+//         end_date: "",
+//       }); // reset form
 //     } catch (err) {
 //       console.error("Error submitting form:", err.response?.data || err);
-//       alert("Something went wrong while assigning task.");
+//       toast.error("Something went wrong while assigning task");
 //     }
 //   };
 
@@ -90,12 +103,11 @@
 //     <div className="add-evaluation-container">
 //       <h2 className="add-evaluation-title">Add Evaluation</h2>
 //       <form onSubmit={handleSubmit} className="add-evaluation-form">
-
 //         {/* Subject */}
 //         <div className="form-group">
-//           <label>Subject:</label>
+//           <label>Module:</label>
 //           <select name="module_id" value={form.module_id} onChange={handleChange}>
-//             <option value="">Select a subject</option>
+//             <option value="">Select a Module</option>
 //             {subjectList.map((subj) => (
 //               <option key={subj.module_id} value={subj.module_id}>
 //                 {subj.module_name}
@@ -106,9 +118,9 @@
 
 //         {/* Group */}
 //         <div className="form-group">
-//           <label>Group:</label>
+//           <label>StudentGroup_name</label>
 //           <select name="group_id" value={form.group_id} onChange={handleChange}>
-//             <option value="">Select a group</option>
+//             <option value="">Select a StudentGroup_name</option>
 //             {groupList.map((group) => (
 //               <option key={group.group_id} value={group.group_id}>
 //                 {group.group_name} ({group.course_name})
@@ -124,7 +136,7 @@
 //             <option value="">Select a staff member</option>
 //             {staffList.map((staff) => (
 //               <option key={staff.staff_id} value={staff.staff_id}>
-//                 Staff ID: {staff.staff_id}
+//                 {staff.staff_name}
 //               </option>
 //             ))}
 //           </select>
@@ -164,11 +176,33 @@
 //           Assign Task
 //         </button>
 //       </form>
+
+//       {/* Toast container */}
+//       <ToastContainer
+//         position="top-right"
+//         autoClose={3000}
+//         hideProgressBar={false}
+//         newestOnTop={true}
+//         closeOnClick
+//         rtl={false}
+//         pauseOnFocusLoss
+//         draggable
+//         pauseOnHover
+//         theme="colored"
+//       />
 //     </div>
 //   );
 // };
 
 // export default AddEvaluation;
+
+
+
+
+
+
+
+
 
 
 
@@ -369,3 +403,4 @@ const AddEvaluation = () => {
 };
 
 export default AddEvaluation;
+

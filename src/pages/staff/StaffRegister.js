@@ -103,7 +103,9 @@
 
 
 import React, { useState } from "react";
-import { toast } from "react-toastify";
+//import { toast } from "react-toastify";
+import { toast, ToastContainer } from "react-toastify";
+
 import "../../App.css"; // add custom css
 
 const StaffRegister = () => {
@@ -231,6 +233,10 @@ const StaffRegister = () => {
           Register
         </button>
       </form>
+
+       {/* Toast container */}
+                  <ToastContainer 
+                  />
     </div>
   );
 };

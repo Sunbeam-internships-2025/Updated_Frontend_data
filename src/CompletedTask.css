@@ -1,0 +1,81 @@
+/* src/pages/coordinator/CompletedTask.css */
+
+.completed-task-container {
+  padding: 2rem;
+  background: #f9fafc;
+  min-height: 100vh;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.page-title {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+  text-align: center;
+}
+
+.loading,
+.error {
+  text-align: center;
+  font-size: 1.2rem;
+  padding: 1rem;
+}
+
+.error {
+  color: #e74c3c;
+  font-weight: 600;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  padding: 1rem;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  color: #34495e;
+}
+
+.task-table th,
+.task-table td {
+  padding: 12px 15px;
+  text-align: center;
+  border-bottom: 1px solid #ecf0f1;
+}
+
+.task-table thead {
+  background: #2c3e50;
+  color: #fff;
+  font-weight: 600;
+}
+
+.task-table tbody tr {
+  transition: background 0.2s ease;
+}
+
+.task-table tbody tr:hover {
+  background: #f0f6ff;
+}
+
+.status {
+  font-weight: bold;
+  color: #27ae60;
+}
+
+@media (max-width: 768px) {
+  .task-table th,
+  .task-table td {
+    padding: 8px 10px;
+    font-size: 0.85rem;
+  }
+
+  .page-title {
+    font-size: 1.5rem;
+  }
+}
