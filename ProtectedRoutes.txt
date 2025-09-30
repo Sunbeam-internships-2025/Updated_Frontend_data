@@ -1,0 +1,216 @@
+
+
+// 30 sept 2025
+
+
+-----------------------------------------------------------------------------------------------
+
+
+
+// src/components/ProtectedRoute.js
+import React from "react";
+import { Navigate } from "react-router-dom";
+
+const ProtectedRoute = ({ coordinator, children }) => {
+  if (!coordinator || !coordinator.name) {
+    // If not logged in as coordinator, redirect
+    return <Navigate to="/coordinator/home" />;
+  }
+  return children;
+};
+
+export default ProtectedRoute;
+
+
+
+
+----------------------------------------------------------------------------------------------
+
+
+
+
+
+
+// App.js
+
+
+
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Navbar from "./components/Navbar";
+import ProtectedRoute from "./components/ProtectedRoute";
+
+// Existing imports...
+import Home from "./pages/Home";
+import Batch from "./pages/Batch";
+import Course from "./pages/Course";
+import Dashboard from "./pages/Dashboard";
+import Staff from "./pages/Staff";
+import Group from "./pages/Group";
+import Module from "./pages/Module";
+import ShowallStudent from "./pages/ShowallStudent";
+
+// Student Pages
+import StudentLogin from "./pages/student/StudentLogin";
+import StudentRegister from "./pages/student/StudentRegister";
+import StudentHome from "./pages/student/StudentHome";
+import StudentMarks from "./pages/student/StudentMarks";
+
+// Staff / Mentor / Coordinator / Admin Pages
+import StaffLogin from "./pages/staff/StaffLogin";
+import StaffRegister from "./pages/staff/StaffRegister";
+import StaffDashboard from "./pages/staff/StaffDashboard";
+import MentorHome from "./pages/Mentor/MentorHome";
+import AdminHome from "./pages/admin/AdminHome";
+import CoordinatorHome from "./pages/Coordinator/CoordinatorHome";
+
+// Admin Pages
+import AddMarksSchemeAdmin from "./pages/admin/addMarksScheme";
+import AssignedTaskAdmin from "./pages/admin/assignedTask";
+import SubmittedTaskAdmin from "./pages/admin/submittedTask";
+import ApprovedTaskAdmin from "./pages/admin/approvedTask";
+
+// Coordinator Pages
+import AddMarksSchemeCoordinator from "./pages/Coordinator/addMarksScheme";
+import AddEvaluation from "./pages/Coordinator/addEvaluation";
+import AssignedTaskCoordinator from "./pages/Coordinator/assigned_Task";
+import PendingTaskCoordinator from "./pages/Coordinator/pendingTask";
+import ApprovedTaskCoordinator from "./pages/Coordinator/Coordinator_approveTask";
+import CoordinatorSubmitTask from "./pages/Coordinator/Coordinator_submitTask";
+
+// Mentor Pages
+// import AddEvaluation from "./pages/Mentor/addEvaluation";
+import PendingTaskMentor from "./pages/Mentor/pendingTask";
+import SubmittedTaskMentor from "./pages/Mentor/submittedTask";
+
+// Toastify
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
+function App() {
+  const [student, setStudent] = useState(null);
+  const [staff, setStaff] = useState(null);
+  const [mentor, setMentor] = useState(null);
+  const [coordinator, setCoordinator] = useState(null);
+  const [admin, setAdmin] = useState(null);
+
+  useEffect(() => {
+    const studentName = localStorage.getItem("studentName");
+    const staffName = localStorage.getItem("staffName");
+    const mentorName = localStorage.getItem("mentorName");
+    const coordinatorName = localStorage.getItem("coordinatorName");
+    const adminName = localStorage.getItem("adminName");
+
+    if (studentName) setStudent({ name: studentName });
+    if (staffName) setStaff({ name: staffName });
+    if (mentorName) setMentor({ name: mentorName });
+    if (coordinatorName) setCoordinator({ name: coordinatorName });
+    if (adminName) setAdmin({ name: adminName });
+  }, []);
+
+  return (
+    <Router>
+      <Navbar
+        student={student} setStudent={setStudent}
+        staff={staff} setStaff={setStaff}
+        mentor={mentor} setMentor={setMentor}
+        coordinator={coordinator} setCoordinator={setCoordinator}
+        admin={admin} setAdmin={setAdmin}
+      />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        {/* Student Routes */}
+        <Route path="/student/studentlogin" element={<StudentLogin setStudent={setStudent} />} />
+        <Route path="/student/studentregister" element={<StudentRegister />} />
+        <Route path="/student/studenthome" element={<StudentHome student={student} />} />
+        <Route path="/student/studentmarks" element={<StudentMarks />} />
+
+        {/* Admin Routes */}
+        <Route path="/admin/home" element={<AdminHome admin={admin} />} />
+        <Route path="/admin/batch" element={<Batch />} />
+        <Route path="/admin/course" element={<Course />} />
+        <Route path="/admin/addmarksscheme" element={<AddMarksSchemeAdmin />} />
+        <Route path="/admin/assignedtask" element={<AssignedTaskAdmin />} />
+        <Route path="/admin/submittedtask" element={<SubmittedTaskAdmin />} />
+        <Route path="/admin/approvedtask" element={<ApprovedTaskAdmin />} />
+
+        {/* Staff Routes */}
+        <Route path="/staff/stafflogin" element={<StaffLogin setStaff={setStaff} setMentor={setMentor} setCoordinator={setCoordinator} setAdmin={setAdmin} />} />
+        <Route path="/staff/staffregister" element={<StaffRegister />} />
+        <Route path="/staff/dashboard" element={<StaffDashboard staff={staff} />} />
+
+        {/* Mentor Routes */}
+        <Route path="/mentor/home" element={<MentorHome mentor={mentor} />} />
+        <Route path="/mentor/pendingtask" element={<PendingTaskMentor />} />
+        <Route path="/mentor/submittedtask" element={<SubmittedTaskMentor />} />
+        {/* <Route path="/mentor/add-evaluation" element={<AddEvaluation />} /> */}
+
+        {/* Coordinator Routes */}
+        <Route path="/coordinator/home" element={<CoordinatorHome coordinator={coordinator} />} />
+        <Route path="/coordinator/assignedtask" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <AssignedTaskCoordinator />
+          </ProtectedRoute>
+        } />
+        <Route path="/coordinator/pendingtask" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <PendingTaskCoordinator />
+          </ProtectedRoute>
+        } />
+       
+        <Route path="/coordinator/submittask" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <CoordinatorSubmitTask />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/coordinator/approvedtask" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <ApprovedTaskCoordinator />
+          </ProtectedRoute>
+        } />
+        <Route path="/coordinator/add-marks-scheme" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <AddMarksSchemeCoordinator />
+          </ProtectedRoute>
+        } />
+
+        <Route path="/coordinator/add-evaluation" element={
+          <ProtectedRoute coordinator={coordinator}>
+            <AddEvaluation />
+          </ProtectedRoute>
+        } />
+
+        {/* Miscellaneous */}
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/staff" element={<Staff />} />
+        <Route path="/admin/group" element={<Group />} />
+        <Route path="/admin/module" element={<Module />} />
+        <Route path="/admin/students" element={<ShowallStudent />} />
+
+      </Routes>
+
+      <ToastContainer />
+    </Router>
+  );
+}
+
+export default App;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
